@@ -1,9 +1,11 @@
 ﻿using System;
+using System.CodeDom;
+using System.Collections.Generic;
 
 namespace Task1
 {
     [Serializable]
-    public sealed class Book : IEquatable<Book>, IComparable<Book>
+    public sealed class Book : IEquatable<Book>, IComparable<Book>, IComparer<Book>
     {
         #region Ctors
         public Book(string author, string title)
@@ -35,7 +37,11 @@ namespace Task1
         {
             if (ReferenceEquals(other, null))
                 return false;
-            if (Author == other.Author && Title == other.Title)
+            if (Author == other.Author &&
+                Title == other.Title &&
+                Genre == other.Genre &&
+                PublishingHouse == other.PublishingHouse &&
+                Pages == other.Pages)
                 return true;
             return false;
         }
@@ -58,7 +64,14 @@ namespace Task1
         {
             if (ReferenceEquals(other, null))
                 throw new ArgumentNullException();
-            return Pages - other.Pages;
+            return String.Compare(Title, other.Title, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public int Compare(Book first, Book second)
+        {
+            if (first == null || second == null)
+                throw new ArgumentNullException();
+            return String.Compare(first.Title, second.Title, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public override string ToString()
@@ -66,6 +79,22 @@ namespace Task1
             string result = string.Format("Book [Title: {0}, Author: {1}, Number of pages: {2}, Genre: {3}, " +
                                           "Publishing house: {4}]", Title, Author, Pages, Genre, PublishingHouse);
             return result;
+        }
+
+        #endregion
+
+        #region Override operators
+
+        public static bool operator ==(Book left, Book right)
+        {
+            if (ReferenceEquals(null, left))
+                throw new ArgumentNullException();
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Book left, Book right)
+        {
+            return !(left == right);
         }
 
         #endregion

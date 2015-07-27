@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Task1;
 
 namespace ConsoleApplication
@@ -24,8 +20,8 @@ namespace ConsoleApplication
             try { bookList.RemoveBook(null); } catch (ArgumentNullException) { }
             try { bookList.RemoveBook(new Book("two", "Two")); } catch (ArgumentException) { }
             Console.WriteLine("BookListService");
-            var bfs = new BinaryFileSerializer("books.bin");
-            bookList.SaveBooks(bfs);
+            var brw = new BinaryReaderWriter("books_new.bin");
+            bookList.SaveBooks(brw);
             bookList.PrintBooks();
             Console.WriteLine();
             bookList.SortBooksByAuthor();
@@ -35,7 +31,7 @@ namespace ConsoleApplication
             bookList.PrintBooks();
             Console.WriteLine();
             var newList = new BookListService();
-            newList.LoadBooks(bfs);
+            newList.LoadBooks(brw);
             newList.PrintBooks();
             Console.ReadLine();
         }

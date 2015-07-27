@@ -12,7 +12,7 @@ namespace Task1
         #region Private fields
     
         private List<Book> books;
-        private Logger logger;
+        private LogAdapter logger;
 
         #endregion
 
@@ -21,10 +21,23 @@ namespace Task1
         public BookListService()
         {
             books = new List<Book>();
-            logger = LogManager.GetCurrentClassLogger();
+            logger = new LogAdapter(new NLogger());
+            logger.Initialize();
         }
         #endregion
 
+        #region Properties
+
+        public Book this[int index]
+        {
+            get
+            {
+                if (index < 0 || index > books.Count)
+                    throw new ArgumentException();
+                return books[index];
+            }
+        }
+        #endregion
 
         #region Public methods
 
