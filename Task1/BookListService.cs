@@ -41,11 +41,11 @@ namespace Task1
 
         #region Public methods
 
-        public void LoadBooks(IBookSerializable bs)
+        public void LoadBooks(IBookStorage bs)
         {
             try
             {
-                books = (List<Book>) bs.Read();
+                books = bs.Load();
             }
             catch (SerializationException e)
             {
@@ -54,11 +54,11 @@ namespace Task1
             }
         }
 
-        public void SaveBooks(IBookSerializable bs)
+        public void SaveBooks(IBookStorage bs)
         {
             try
             {
-                bs.Write(books);
+                bs.Save(books);
             }
             catch (SerializationException e)
             {

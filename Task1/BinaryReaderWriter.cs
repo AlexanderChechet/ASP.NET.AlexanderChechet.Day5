@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Task1
 {
-    public class BinaryReaderWriter : IBookSerializable
+    public class BinaryReaderWriter : IBookStorage
     {
         private string path;
 
@@ -14,7 +15,7 @@ namespace Task1
             this.path = path;
         }
 
-        public object Read()
+        public List<Book> Load()
         {
             List<Book> books = new List<Book>();
             using (BinaryReader br = new BinaryReader(File.Open(path, FileMode.Open)))
@@ -26,21 +27,20 @@ namespace Task1
             return books;
         }
 
-        public void Write(object bookList)
+        public void Save(IEnumerable<Book> books)
         {
-            List<Book> books = bookList as List<Book>;
             if (books == null)
                 throw new SerializationException();
             using (BinaryWriter bw = new BinaryWriter(File.Open(path, FileMode.Create)))
             {
-                bw.Write(books.Count);
-                for (int i = 0; i < books.Count; i++)
+                bw.Write(books.Count());
+                foreach(var book in books)
                 {
-                    bw.Write(books[i].Author);
-                    bw.Write(books[i].Title);
-                    bw.Write(books[i].Genre ?? String.Empty);
-                    bw.Write(books[i].PublishingHouse ?? String.Empty);
-                    bw.Write(books[i].Pages);
+                    bw.Write(book.Author);
+                    bw.Write(book.Title);
+                    bw.Write(book.Genre ?? String.Empty);
+                    bw.Write(book.PublishingHouse ?? String.Empty);
+                    bw.Write(book.Pages);
                 }
             }
         }

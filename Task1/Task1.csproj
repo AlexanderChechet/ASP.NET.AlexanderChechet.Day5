@@ -47,7 +47,7 @@
     <Compile Include="BinaryReaderWriter.cs" />
     <Compile Include="Book.cs" />
     <Compile Include="BookListService.cs" />
-    <Compile Include="IBookSerializable.cs" />
+    <Compile Include="IBookStorage.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="LogAdapter.cs" />
     <Compile Include="NLogger.cs" />

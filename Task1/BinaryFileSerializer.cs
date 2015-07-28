@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Task1
 {
-    public sealed class BinaryFileSerializer : IBookSerializable
+    public sealed class BinaryFileSerializer : IBookStorage
     {
         private string path;
 
@@ -17,27 +14,27 @@ namespace Task1
             this.path = path;
         }
 
-        public object Read()
+        public List<Book> Load()
         {
-            object result;
+            List<Book> result;
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentException();
             BinaryFormatter bf = new BinaryFormatter();
             using (var fs = new FileStream(path, FileMode.Open))
             {
-                result = bf.Deserialize(fs);
+                result = (List<Book>) bf.Deserialize(fs);
             }
             return result;
         }
 
-        public void Write(object bookList)
+        public void Save(IEnumerable<Book> books)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentException();
             BinaryFormatter bf = new BinaryFormatter();
             using (var fs = new FileStream(path, FileMode.OpenOrCreate))
             {
-                bf.Serialize(fs, bookList);
+                bf.Serialize(fs, books);
             }
         }
     }
